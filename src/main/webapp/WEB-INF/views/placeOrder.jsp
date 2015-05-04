@@ -1,5 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@include file="includes/header.jsp" %>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/order.js"></script>
 	<div class="content-container">
 	<div class="list-container-medium">
 		<h3>Place an Order</h3>

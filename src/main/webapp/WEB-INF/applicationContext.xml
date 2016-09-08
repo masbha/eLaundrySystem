@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-   xmlns:tx="http://www.springframework.org/schema/tx"
-   xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
     xsi:schemaLocation="
       http://www.springframework.org/schema/beans 
-      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
- 	  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+ 	  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
       http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
  
  <!-- The jpa:repositories scans for all interfaces that extend JpaRepository and 
       creates implementations for use at runtime.  -->
- <jpa:repositories base-package="elaundry.repository" />
+ 	<jpa:repositories base-package="elaundry.repository" />
  
  
  <!-- Creates a JPA EntityManagerFactory according to JPA's standard container bootstrap contract.
@@ -60,13 +60,11 @@
    </bean>
    
    <!-- Scan for  transaction-based resources -->
-   	<context:component-scan base-package="elaundry.service" />
-  	<context:component-scan base-package="elaundry.domain" />
-    <context:component-scan base-package="elaundry.repository" />
+   	<context:component-scan base-package="elaundry.service, elaundry.domain, elaundry.repository" />
     
    	<tx:annotation-driven transaction-manager="transactionManager"/>
  
- <!--
+ 	<!--
         Post-processor to perform exception translation on @Repository classes
         (from native exceptions such as JPA PersistenceExceptions to
         Spring&rsquo;s DataAccessException hierarchy).

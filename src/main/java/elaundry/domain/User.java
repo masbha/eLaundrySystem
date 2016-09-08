@@ -6,24 +6,13 @@
 
 package elaundry.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.multipart.MultipartFile;
 
 
 
@@ -34,12 +23,13 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
     
+
     @NotEmpty
-    @NotNull
+    @NotBlank
     private String username;
     
     @NotEmpty
-    @NotNull
+    @NotBlank
     private String password;
     
     /*private String authority;

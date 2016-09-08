@@ -41,16 +41,16 @@ public class Customer {
 	@Valid
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address address;
-	
+	@Valid
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User users;
+    private User user;
 	
 	public User getUser() {
-		return users;
+		return user;
 	}
 
 	public void setUser(User user) {
-		this.users = user;
+		this.user = user;
 	}
 
 	public Customer() {

@@ -9,7 +9,7 @@ INSERT INTO `address` (`id`, `city`, `state`, `street`, `zipCode`) VALUES
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `password`, `username`, `authority`, `enabled`) VALUES
+INSERT INTO `user` (`id`, `password`, `username`, `authority`, `enabled`) VALUES
 (1, 'admin', 'admin', 'ROLE_ADMIN', 1),
 (2, 'user', 'user', 'ROLE_USER', 1);
 
@@ -17,7 +17,7 @@ INSERT INTO `users` (`id`, `password`, `username`, `authority`, `enabled`) VALUE
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`id`, `firstName`, `middleName`, `lastName`, `dateOfBirth`, `email`, `phone`, `gender`, `address_id`, `users_id`) VALUES
+INSERT INTO `customer` (`id`, `firstName`, `middleName`, `lastName`, `dateOfBirth`, `email`, `phone`, `gender`, `address_id`, `user_id`) VALUES
 (1, 'Masbha Uddin', '', 'Ahmed', '0000-00-00', 'masbha2001@yahoo.com', '641-123-8765', 'M', 1, 1),
 (2, 'User', '', 'User', '0000-00-00', 'user@yahoo.com', '641-123-8765', 'M', 2, 2);
 

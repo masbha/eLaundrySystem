@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `phone` varchar(20) NOT NULL,
   `gender` varchar(10) NOT NULL,
   `address_id` int(11) NOT NULL,
-  `users_id` int(11) NOT NULL
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
@@ -111,10 +111,10 @@ CREATE TABLE IF NOT EXISTS `serviceorder` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `user` (
 `id` int(11) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
@@ -163,9 +163,9 @@ ALTER TABLE `serviceorder`
  ADD PRIMARY KEY (`sorder_id`);
 
 --
--- Indexes for table `users`
+-- Indexes for table `user`
 --
-ALTER TABLE `users`
+ALTER TABLE `user`
  ADD PRIMARY KEY (`id`);
 
 --
@@ -203,9 +203,9 @@ MODIFY `order_item_id` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `serviceorder`
 MODIFY `sorder_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `user`
 --
-ALTER TABLE `users`
+ALTER TABLE `user`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

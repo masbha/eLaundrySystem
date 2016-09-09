@@ -26,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService{
 	public List<Customer> getAllCustomers() {
 		// TODO Auto-generated method stub
 		return (List<Customer>)customerRepository.findAll();
+		//return (List<Customer>)customerRepository.getAllCustomers(); This will also work
 	}
 	
 	public void addCustomer(Customer customer) {

@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 
-@Entity(name="users")
+@Entity(name="user")
 public class User {
     
     @Id

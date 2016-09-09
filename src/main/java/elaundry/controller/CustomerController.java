@@ -50,7 +50,7 @@ public class CustomerController {
 			//customerToBeAdded.getUser().setEnabled(true);
 			customerService.addCustomer(customerToBeAdded);
 		} else {
-			model.addAttribute("usernameerror", "username exist");
+			model.addAttribute("usernameerror", "username already exist");
 			User u = customerToBeAdded.getUser();
 			u.setPassword("");
 			customerToBeAdded.setUser(u);

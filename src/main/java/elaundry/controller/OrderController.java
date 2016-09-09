@@ -7,10 +7,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-//import org.json.JSONArray;
-//import org.json.JSONObject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.TypeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,10 +25,12 @@ import elaundry.domain.LaundryService;
 import elaundry.domain.OrderDummy;
 import elaundry.domain.OrderItem;
 import elaundry.domain.SOrder;
+import elaundry.domain.User;
 import elaundry.service.LaundryItemService;
 import elaundry.service.LaundryServiceService;
 import elaundry.service.OrderItemService;
 import elaundry.service.SOrderService;
+import elaundry.service.UserService;
 
 @Controller
 @RequestMapping("orders")
@@ -45,6 +48,9 @@ public class OrderController {
 	@Autowired
 	private OrderItemService orderItemService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@RequestMapping(value = "/placeOrder", method = RequestMethod.GET)
 	public String PlaceOrderForm(Model model, HttpServletRequest request) {
 		model.addAttribute("orderDummy", new OrderDummy());
@@ -54,10 +60,11 @@ public class OrderController {
 	
 	@RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
 	public String ProcessOrder(Model model, @ModelAttribute("orderDummy") OrderDummy orderDummy, HttpServletRequest request) {
-		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		try {
 			SOrder order = new SOrder();
-			order.setCustomerId(1); //should be get customerId from session
+			User user = userService.checkUserName(auth.getName());
+			order.setCustomerId(user.getId()); //should be get customerId from session
 			order.setOrderStatus("Placed");
 			order.setOrderDate(new Date().toString());
 			order.setExpDeliveryDate(new Date().toString());
@@ -65,19 +72,16 @@ public class OrderController {
 			
 			SOrder savedOrder = orderService.addOrder(order);
 			List<OrderItem> orderItemList = new ArrayList<OrderItem>();
-			
-			/*JSONArray jsonArray = new JSONArray(orderDummy.getItemList());
-			for (int i = 0; i < jsonArray.length(); i++) {
-				JSONObject item = jsonArray.getJSONObject(i);
-
-				OrderItem orderItem = new OrderItem();
-				orderItem.setOrderId(savedOrder.getOrderId());
-				orderItem.setLaundryItemId(Integer.parseInt(item.get("itemId").toString()));
-				orderItem.setQuantity(Integer.parseInt(item.get("quantity").toString()));
-				OrderItem savedItem = orderItemService.addOrderItem(orderItem);
-				orderItemList.add(savedItem);
+			System.out.println("Json Object:" + orderDummy.getItemList());
+			ObjectMapper mapper = new ObjectMapper();
+			orderItemList = mapper.readValue(orderDummy.getItemList(),
+					TypeFactory.defaultInstance().constructCollectionType(List.class, OrderItem.class));
+			for (OrderItem oi :orderItemList) {
+				oi.setOrderId(savedOrder.getOrderId());
+				System.out.println("OrderId:" + savedOrder.getOrderId() + " item:" + oi.getLaundryItemId() + " quantity:" + oi.getQuantity());
+				orderItemService.addOrderItem(oi);
 			}
-			*/
+			
 			return "redirect:/orders/viewOrder/" + savedOrder.getOrderId();
 			
 		} catch (Exception e) {
@@ -89,7 +93,6 @@ public class OrderController {
 	}
 	
 	@RequestMapping(value = "/changeOrderStatus", method = RequestMethod.GET)
-//	public String ChangeOrderStatus(Model model, @ModelAttribute("order") SOrder order, @Param("orderId") int orderId, HttpServletRequest request) {
 	public String ChangeOrderStatus(Model model, @ModelAttribute("order") SOrder order, HttpServletRequest request) {
 				
 		List<SOrder> orders;
@@ -99,24 +102,23 @@ public class OrderController {
 			orderService.updateOrderStatus(order.getOrderStatus(), order.getOrderId());	
 			orders = orderService.getOrders();
 			
-			SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
+			//SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
 			
-			for(SOrder sorder : orders) {			
+			for (SOrder sorder : orders) {			
 				OrderDummy orderDummy = new OrderDummy();
 				orderDummy.setOrderId(sorder.getOrderId());
 				orderDummy.setOrderDate(sorder.getOrderDate());
 				orderDummy.setExpDeliveryDate(sorder.getExpDeliveryDate());
 				orderDummy.setCustomerId(sorder.getCustomerId());
 				orderDummy.setOrderStatus(sorder.getOrderStatus());
-				
 //				System.out.println(dtFormat.format(sorder.getOrderDate()));
-				/*List<OrderItem> items = orderItemService.getOrderItemsByOrderId(sorder.getOrderId());
+				List<OrderItem> items = orderItemService.getOrderItemsByOrderId(sorder.getOrderId());
 				double totalPrice = 0;
-				for(OrderItem item : items) {
+				for (OrderItem item : items) {
 					LaundryItem lItem = laundryItemService.getLaundryItemById(item.getLaundryItemId());
 					totalPrice += item.getQuantity() * lItem.getPrice();
 				}
-				orderDummy.setTotalPrice(totalPrice);*/
+				orderDummy.setTotalPrice(totalPrice);
 				orderList.add(orderDummy);
 			}				
 			
@@ -143,7 +145,7 @@ public class OrderController {
 			itemDummy.setQuantity((int)item.getQuantity());
 			
 			LaundryItem laundryItem = laundryItemService.getLaundryItemById(item.getLaundryItemId());
-			if(laundryItem != null) {
+			if (laundryItem != null) {
 				itemDummy.setTotalPrice(item.getQuantity() * laundryItem.getPrice());			
 				itemDummy.setLaundryItemId(laundryItem.getItemId());
 				itemDummy.setItemName(laundryItem.getName());

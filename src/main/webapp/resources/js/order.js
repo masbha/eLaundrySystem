@@ -58,13 +58,13 @@ $(document).ready(function() {
 	};
 	
 	populateOrderItems = function (itemId, quantity) {
-		items.push({itemId:itemId, quantity:quantity});
+		items.push({laundryItemId:itemId, quantity:quantity});
 		$('#itemList').val(JSON.stringify(items));
 	};
 	
 	deleteJsonObjectValue = function (items, deletedId) {
 		$.grep(items, function(e){ 
-		     return e.itemId != deletedId; 
+		     return e.laundryItemId != deletedId; 
 		});
 	};
 	
